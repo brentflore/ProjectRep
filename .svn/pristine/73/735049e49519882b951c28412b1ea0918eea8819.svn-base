@@ -1,0 +1,142 @@
+package domein.domein;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import persistance.Mapper;
+import persistance.MapperFactory;
+import persistance.SoortMapper;
+
+public class Campus 
+{
+    private List<Student> studentenlijst;
+    private Set<Student> geselecteerdeStudenten;
+    private List<Promotor> promotorenlijst;
+    private Promotor geselecteerdePromotor;
+    private Mapper mapper;//tijdelijk tot juist structuur voor jpa gezien is
+
+    public Campus() 
+    {
+        vraagPromotorenOp();
+        vraagStudentenOp();
+    }
+
+    public List<? extends Gebruiker> geefStudentenOfPromotorenlijst(String gebruikerType) 
+    {
+        switch (gebruikerType) 
+        {
+            case "PROMOTOR": return Collections.unmodifiableList(promotorenlijst);
+            case "STUDENT":  return Collections.unmodifiableList(studentenlijst);
+            default:         return null;
+        }
+    }
+
+    public Student geefStudent(int rij) 
+    {
+        if (studentenlijst == null) 
+            geefStudentenOfPromotorenlijst("STUDENT");
+        return (Student) studentenlijst.get(rij);
+    }
+    
+    public Promotor geefPromotor(int rij)
+    {
+        if (promotorenlijst == null) 
+            geefStudentenOfPromotorenlijst("PROMOTOR");
+        return (Promotor) promotorenlijst.get(rij);
+    }
+
+    public List<Student> getGeselecteerdeStudenten() 
+    {
+        return new ArrayList(geselecteerdeStudenten);
+    }
+
+    //List<String> geselecteerdeStudenten
+   public void setGeselecteerdeStudenten(List<Student> geselecteerdeStudenten) { 
+        this.geselecteerdeStudenten = new HashSet<>(geselecteerdeStudenten); 
+    }
+
+    public void koppelStudentEnPromotor(Student student, Promotor promotor) {
+        student.setPromotor(promotor);
+        promotor.addStudent(student);
+    }
+
+    public boolean checkHeeftStudentEenPromotor(Student student) {
+        if (student.getPromotor() != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean heeftPromotorNogPlaatsVoorStudenten(Promotor promotor) {
+        if (promotor.getMaxStudenten() > promotor.geefAantalStudenten()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void ontkoppelStudentEnPromotor(Student student, Promotor promotor) {
+        student.setPromotor(null);
+        promotor.verwijderStudent(student);
+    }
+
+    public void verwijderStudentUitLijst(Student student) {
+        geselecteerdeStudenten.remove(student);
+    }
+    
+    public void koppelPromotorEnGeselecteerdeStudenten(Promotor promotor) { 
+        for (Student s : geselecteerdeStudenten) { 
+            if (heeftPromotorNogPlaatsVoorStudenten(promotor)) { 
+                koppelStudentEnPromotor(s, promotor); 
+            } else { 
+                throw new IllegalArgumentException("maximum aantal studenten van deze promotor is bereikt, "
+                        + "selecteer een andere promotor"); 
+            } 
+        } 
+  
+    } 
+    
+    /*
+    public void koppelPromotorEnGeselecteerdeStudenten(Promotor promotor) {
+        while (heeftPromotorNogPlaatsVoorStudenten(promotor) && geselecteerdeStudenten.get(0) != null) {
+            koppelStudentEnPromotor(geselecteerdeStudenten.get(0), promotor);
+            geselecteerdeStudenten.remove(0);
+        }
+
+        if (!heeftPromotorNogPlaatsVoorStudenten(promotor) && geselecteerdeStudenten.get(0) != null) {
+            throw new IllegalArgumentException("maximum aantal studenten van deze promotor is bereikt, "
+                    + "selecteer een andere promotor");
+        }
+    }*/
+
+    public void maakGeselecteerdeStudentenLeeg() { geselecteerdeStudenten.clear(); }
+
+    private void vraagStudentenOp() 
+    {
+        if (mapper == null || !mapper.getClass().equals(Student.class)) 
+            mapper = MapperFactory.geefMapper(SoortMapper.STUDENT);
+        studentenlijst = (List<Student>) mapper.geefLijst();
+    }
+
+    private void vraagPromotorenOp() 
+    {
+        if (mapper == null || !mapper.getClass().equals(Promotor.class)) 
+            mapper = MapperFactory.geefMapper(SoortMapper.PROMOTOR);
+        promotorenlijst = (List<Promotor>) mapper.geefLijst();
+    }
+
+    public int geefAantalStudenten() { return studentenlijst.size(); }
+
+    public int geefAantalPromotoren() { return promotorenlijst.size(); }
+
+    public int geefAantalGeselecteerdeStudenten() 
+    {
+        if(geselecteerdeStudenten==null)
+            return 0;
+        return geselecteerdeStudenten.size();
+    }
+}

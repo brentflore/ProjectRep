@@ -1,0 +1,87 @@
+package gui;
+
+<<<<<<< .mine
+import domein.tableModel.StudentTableModel;
+
+=======
+import domein.domein.CampusController;
+import domein.tableModel.StudentTableModel;
+import javax.swing.table.TableModel;
+
+>>>>>>> .r107
+/**
+ *
+ * @author Kristine
+ */
+public class GuiController 
+{
+<<<<<<< .mine
+    private StudentTableModel sModel;
+
+    public GuiController(StudentTableModel sModel) 
+    {
+        this.sModel = sModel;
+    }
+    
+    public void setLijst(String lijst)
+    {
+        sModel.vulLijstStudenten(lijst);
+    }
+
+    public void maakScherm(String scherm) 
+    {
+        switch (scherm) 
+		{ //Meegeven welke lijst van studenten in het tablemodel moet komen?
+		//case "schermSelStudenten": new OverzichtPanel(new StudentTableModel(null), "schermSelStudenten");
+                //default: null;
+        }
+        
+    }
+    
+=======
+    private BPCFrame frame;
+    private LoginFrame lFrame;
+    
+    private StudentTableModel sModel;
+    
+    public GuiController(StudentTableModel sModel)
+    {
+        this.sModel = sModel; System.out.println("sModel - gCont contructor");
+       // frame = new BPCFrame(new CampusController());
+       // frame.getInstance();
+        
+    }
+
+    public GuiController()
+    {
+        System.out.println("01 - GuiController w aangemaakt");
+    }
+    
+    public void maakBPCFrame()
+    {
+        frame = new BPCFrame(new CampusController(), this);
+    }
+    
+    public void setTableModel(StudentTableModel sModel)
+    {
+        this.sModel = sModel;
+    }
+    
+    public void setLijst(String lijst/*, int rij*/)
+    {
+        System.out.println(lijst);
+        sModel.vulLijstStudenten(lijst/*, rij*/);
+    }
+    
+    public void selecteerStudent(int rij)
+    {
+        sModel.selecteerStudent(rij);
+    }
+    
+    public void voegSchermToe(OverzichtPanel o)
+    {
+        frame.voegPanelToe(o);
+    }
+>>>>>>> .r107
+    
+}

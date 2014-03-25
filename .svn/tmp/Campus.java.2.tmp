@@ -1,0 +1,235 @@
+package domein.domein;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import persistance.Mapper;
+import persistance.MapperFactory;
+import persistance.SoortMapper;
+
+/*
+ *       @author Jelle
+ */
+public class Campus {
+
+    //private List<Gebruiker> gebruikers;
+    private List<Student> studentenlijst;
+    private List<Promotor> promotorenlijst;
+    private List<Student> geselecteerdeStudenten;
+    private Promotor geselecteerdePromotor;
+    private Mapper mapper;//tijdelijk tot juist structuur voor jpa gezien is
+    private List<? extends Gebruiker> gebruikerslijst;
+
+    public Campus() {
+        vraagPromotorenOp();
+        vraagStudentenOp();
+        //vraagGebruikersOp("PROMOTOR");
+        //vraagGebruikersOp("STUDENT");
+        
+        //gebruikers = new ArrayList<Gebruiker>(studentenlijst);
+        //gebruikers.addAll(promotorenlijst);
+    }
+
+    public void setGeselecteerdeStudenten(List<String> geselecteerdeStudenten) 
+    {
+        for(Student s:studentenlijst)
+            if(geselecteerdeStudenten.contains(s.getIdNummer()))
+            
+                this.geselecteerdeStudenten.add(s);
+    }
+    
+    public List<Student> getGeselecteerdeStudenten(int rij) 
+    {
+        return geselecteerdeStudenten;
+    }
+    /*
+        public Student geefStudent(Integer index) 
+	{
+		if(studentenlijst == null)
+			vraagStudentenOp();
+		return studentenlijst.get(index);
+	}
+    */
+    
+
+    /**
+     * @author Jelle
+     * @param gebruikerType , PROMOTOR of STUDENT
+     * @return een niet wijzigbare lijst van het gekozen gebruikertype
+     */
+    public List<? extends Gebruiker> geefStudentenOfPromotorenlijst(String gebruikerType) {          // even deze methodes opgeruimd!
+
+        switch (gebruikerType) {
+            case "PROMOTOR":
+                return Collections.unmodifiableList(promotorenlijst);
+            case "STUDENT":
+                return Collections.unmodifiableList(studentenlijst);
+            default:
+                return null;
+        }
+        
+    }
+        /**
+         * @author Jelle
+         * @param student
+         * @param promotor
+         *
+         * Koppelt de student en promotor
+         */
+    public void koppelStudentEnPromotor(Student student, Promotor promotor) {
+        student.setPromotor(promotor);
+        promotor.addStudent(student);
+    }
+
+    /**
+     * @author Jelle
+     * @param student
+     * @return true als de student al een promotor heeft
+     */
+    public boolean checkHeeftStudentEenPromotor(Student student) {
+        if (student.getPromotor() != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @author Jelle
+     * @param promotor
+     * @return returned true als de promotor nog 1 of meer studenten in zijn
+     * lijst kan steken.
+     */
+    public boolean heeftPromotorNogPlaatsVoorStudenten(Promotor promotor) {
+        if (promotor.getMaxStudenten() > promotor.geefAantalStudenten()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @author Jelle
+     * @param student
+     * @param promotor Verwijdert de koppeling tussen een student en een
+     * promotor
+     */
+    public void ontkoppelStudentEnPromotor(Student student, Promotor promotor) {
+        student.setPromotor(null);
+        promotor.verwijderStudent(student);
+    }
+
+    /**
+     * @author Jelle
+     * @param student verwijdert een student uit de lijst met geselecteerde
+     * studenten
+     */
+    public void verwijderStudentUitLijst(Student student) {
+        geselecteerdeStudenten.remove(student);
+    }
+
+    /**
+     * @author Jelle
+     * @param promotor koppelt de promotor met de geselecteerde studenten
+     */
+    public void koppelPromotorEnGeselecteerdeStudenten(Promotor promotor) {
+        while (heeftPromotorNogPlaatsVoorStudenten(promotor) && geselecteerdeStudenten.get(0) != null) {
+            koppelStudentEnPromotor(geselecteerdeStudenten.get(0), promotor);
+            geselecteerdeStudenten.remove(0);
+        }
+
+        if (!heeftPromotorNogPlaatsVoorStudenten(promotor) && geselecteerdeStudenten.get(0) != null) {
+            throw new IllegalArgumentException("maximum aantal studenten van deze promotor is bereikt, "
+                    + "selecteer een andere promotor");
+        }
+    }
+
+    /**
+     * @author Jelle maakt de lijst van geselecteerde studenten leeg
+     */
+    public void maakGeselecteerdeStudentenLeeg() {
+        geselecteerdeStudenten.clear();
+    }
+    /**
+     * 
+     *Deze methode vraagt een lijst van studenten op uit de databank.
+     */
+    private void vraagStudentenOp() {
+        if (mapper == null || !mapper.getClass().equals(Student.class)) {
+            mapper = MapperFactory.geefMapper(SoortMapper.STUDENT);
+        }
+        studentenlijst = (List<Student>) mapper.geefLijst();
+    }
+    /**
+     * 
+     *Deze methode vraagt een lijst van promotoren op uit de databank.
+     */
+    private void vraagPromotorenOp() {
+        if (mapper == null || !mapper.getClass().equals(Promotor.class)) {
+            mapper = MapperFactory.geefMapper(SoortMapper.PROMOTOR);
+        }
+        promotorenlijst = (List<Promotor>) mapper.geefLijst();
+    }
+
+    public int geefAantalStudenten() {
+        return studentenlijst.size();
+    }
+
+    public int geefAantalPromotoren() {
+        return promotorenlijst.size();
+    }
+    
+    public int geefAantalGebruikers(String type) 
+    {
+        switch(type.toUpperCase())
+        {
+        case "PROMOTOR":
+            if (promotorenlijst == null) 
+                opvragenPromotoren();
+            return promotorenlijst.size();
+        case "STUDENT":
+            if (studentenlijst == null)
+                opvragenStudenten();
+            return studentenlijst.size();
+        default: return 0;
+        }
+        
+    }
+
+    /*
+    public List<Student> geefStudentZonderProm() {
+        List<Student> studenten = new ArrayList<>();
+        if (studentenlijst == null) {
+            geefAlleStudenten();
+        }
+        for (Student s : studentenlijst) {
+            if (s.getPromotor() == null) {
+                studenten.add(s);
+            }
+        }
+        return studenten;
+    }*/
+
+    
+    /*
+     public Promotor geefBeschikbarePromotor(int rij) 
+     {
+     if (promotorenlijst == null) {
+     geefPromotorenlijst();
+     }
+     return promotorenlijst.get(rij);
+     }*/
+    
+    
+    
+    /*
+    private void vraagGebruikersOp(String type) 
+    {
+        String gebruiker = type.toUpperCase();
+        if (mapper == null || !mapper.getClass().getName().toUpperCase().equals(gebruiker)) {
+            mapper = MapperFactory.geefMapper(SoortMapper.valueOf(gebruiker));
+        }
+        gebruikerslijst = (List<? extends Gebruiker>) mapper.geefLijst();
+    }*/
+}

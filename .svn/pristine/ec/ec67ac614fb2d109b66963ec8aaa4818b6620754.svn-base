@@ -1,0 +1,57 @@
+package gui;
+
+import domein.domein.CampusController;
+import domein.tableModel.StudentTableModel;
+import javax.swing.table.TableModel;
+
+/**
+ *
+ * @author Kristine
+ */
+public class GuiController 
+{
+    private BPCFrame frame;
+    private LoginFrame lFrame;
+    
+    private StudentTableModel sModel;
+    
+    public GuiController(StudentTableModel sModel)
+    {
+        this.sModel = sModel; System.out.println("sModel - gCont contructor");
+       // frame = new BPCFrame(new CampusController());
+       // frame.getInstance();
+        
+    }
+
+    public GuiController()
+    {
+        System.out.println("01 - GuiController w aangemaakt");
+    }
+    
+    public void maakBPCFrame()
+    {
+        frame = new BPCFrame(new CampusController(), this);
+    }
+    
+    public void setTableModel(StudentTableModel sModel)
+    {
+        this.sModel = sModel;
+    }
+    
+    public void setLijst(String lijst/*, int rij*/)
+    {
+        System.out.println(lijst);
+        sModel.vulLijstStudenten(lijst/*, rij*/);
+    }
+    
+    public void selecteerStudent(int rij)
+    {
+        sModel.selecteerStudent(rij);
+    }
+    
+    public void voegSchermToe(OverzichtPanel o)
+    {
+        frame.voegPanelToe(o);
+    }
+    
+}

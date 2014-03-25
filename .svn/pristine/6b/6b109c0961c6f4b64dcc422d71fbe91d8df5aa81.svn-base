@@ -1,0 +1,111 @@
+package domein.tableModel;
+
+import domein.domein.Campus;
+import domein.domein.CampusController;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.table.AbstractTableModel;
+
+import domein.domein.Promotor;
+import domein.domein.Student;
+import domein.domein.Subject;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class PromotorTableModel extends AbstractTableModel implements Observer, Subject {
+	// is luisteraar van OverzichtPanel
+    // en
+    // is luisteraar van Controller
+    private Student student;
+    private CampusController campusController;
+    private Campus campus;
+    private static final int MAX_KOLOMMEN = 4;
+    private static final String[] KOLOMNAMEN
+            = {"NAAM", "VOORNAAM", "PERSONEELSNR", "MAXSTUD"};
+    private Set<Observer> observers;
+
+    public PromotorTableModel(/*Student student*/Campus campus) {
+        //this.student = student;
+        this.campus = campus;
+        observers = new HashSet<>();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return MAX_KOLOMMEN;
+    }
+
+    @Override // Should be 0 or 1
+    public int getRowCount() {
+        return campus.geefAantalPromotoren();
+    }
+
+    @Override
+    public String getColumnName(int kolom) {
+        return KOLOMNAMEN[kolom];
+    }
+
+    @Override
+    public Object getValueAt(int rij, int kolom) {
+                //student = campus.geefStudent(rij);
+        //if (student == null)
+        //	return "";
+        //Promotor promotor = student.getPromotor();
+        Promotor promotor = geefPromotor(rij);
+        switch (kolom) // info van promotor weergeven
+        {
+            case 0:
+                return promotor.getNaam();
+            case 1:
+                return promotor.getVoornaam();
+            case 2:
+                return promotor.getPersoneelsNummer();
+            case 3:
+                return promotor.getMaxStudenten();
+            default:
+                return "";
+        }
+    }
+
+    @Override
+    public void update(Observable arg0, Object object) {
+        /* TODO */
+    }
+
+    private List<Promotor> promotorenlijst;
+
+    public void vulLijstPromotoren(String lijst)// switch met string doorgeven, welke lijst, vanuit gui
+    {
+        switch (lijst) {
+            case "alle":
+                this.promotorenlijst = campus.geefAllePromotoren();
+		//case "zStud": this.promotorenlijst = campus.geefAllePromotoren();
+            //case "mStud": this.promotorenlijst = campus.geefAllePromotoren();
+            default:
+                this.promotorenlijst = campus.geefAllePromotoren();
+        }
+            //this.promotorenlijst = campus.geefAllePromotoren(); //'all'
+        //case "metProm" = this.studenten = campus.geefStudentenMetProm();
+    }
+
+    public Promotor geefPromotor(int rij) {
+        if (promotorenlijst == null) {
+            vulLijstPromotoren("alle");
+        }
+        return promotorenlijst.get(rij);
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void notifyObserver(Object object) {
+        for (Observer observer : observers) {
+            observer.update(null, object);
+        }
+    }
+}

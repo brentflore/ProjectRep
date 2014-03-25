@@ -1,0 +1,93 @@
+package testen_Verplaats;
+
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+
+import testen.*;
+
+import domein.domein.CampusController;
+import domein.domein.Promotor;
+import domein.domein.Student;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author Gebruiker
+ */
+public class UC2Test {
+    
+   private CampusController cc;
+   private Student geselecteerdeStudent;
+   private Promotor geselecteerdePromotor;
+   private String studentnr = "1", promnr = "2";
+   private int maxStudenten;
+   
+   
+   
+    @Before
+    public void before() {
+        cc = new CampusController();
+        geselecteerdeStudent = new Student("Jan","Janssens",studentnr);
+        geselecteerdePromotor= new Promotor("Tom","Tomson",promnr,10);
+    }
+    
+    @Test
+    public void ToewijzenPromotorTest()  // wijst een promotor toe aan de student
+    {
+        cc.setGeselecteerdeStudent(geselecteerdeStudent);
+        cc.setGeselecteerdePromotor(geselecteerdePromotor);
+        
+        assertEquals(geselecteerdePromotor, cc.geefPromotor(0));
+        assertEquals(geselecteerdeStudent, cc.geefStudent(0));
+    }   
+   
+  @Test
+  public void controleerLeerlingBijPromotor()
+  {
+      assertTrue(cc.zoekStudentBijPromotor(geselecteerdeStudent));
+  }
+  
+  @Test
+  public void controleerPromotorBijLeerling()
+  {
+      assertTrue(cc.zoekPromotorBijStudent(geselecteerdePromotor));
+  }
+  
+  @Test
+  public void ontkoppelStudentPromotor()
+  {
+      cc.ontkoppelStudentPromotor(geselecteerdeStudent, geselecteerdePromotor);
+      assertNull(cc.geefPromotor(0));
+      assertFalse(cc.zoekStudentBijPromotor(geselecteerdeStudent));
+  }
+  
+  @Test
+  public void controleerGeselecteerdeStudentNietLeeg()
+  {
+      assertNotNull(cc.geefGeselecteerdeStudent());
+  }
+  
+  @Test
+  public void controleerGeselecteerdePromotorNietLeeg()
+  {
+      assertNotNull(cc.geefGeselecteerdePromotor());
+  }
+  
+  @Test(expected=IllegalArgumentException.class)
+  public void controleerKanMaxStudentenNietOverschrijden()
+  {
+      maxStudenten = cc.geefMaxStudentenPromotor();
+      cc.voegStudentToeNaMax(geselecteerdeStudent);
+  }
+  
+}

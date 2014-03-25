@@ -1,0 +1,79 @@
+package domein.domein;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
+@Entity
+@NamedQueries({@NamedQuery(name="Prom.findAll", query = "SELECT d FROM Promotor d ")})
+public class Promotor extends Gebruiker
+{
+        @OneToMany(mappedBy="promotor")
+	private List<Student> studenten;
+        
+        private int maxStudenten;
+
+        public Promotor()//default constructor voor JPA
+        {}
+        
+        
+        public Promotor(String personeelsNummer, String naam, String voornaam, int maxStudenten)
+        {
+            super(personeelsNummer,naam, voornaam);
+            this.maxStudenten = maxStudenten;
+            studenten = new ArrayList<>();
+        }
+        
+        
+	public int geefAantalStudenten()
+	{
+		return studenten.size();
+	}
+	
+	public Student geefStudent(int index)
+	{
+		return null;
+	}
+
+        public int getMaxStudenten() {
+            return maxStudenten;
+        }
+
+        public void addStudent(Student student) {
+            this.studenten.add(student);
+        }
+        
+    // get & set
+        
+    public List<Student> getStudenten() {
+        return studenten;
+    }
+    
+    public void setStudenten(List<Student> studenten) {
+        this.studenten = studenten;
+    }
+    
+    public String getPersoneelsNummer() {
+        return super.getIdNummer();
+    }
+
+    public void setPersoneelsNummer(String personeelsNummer) {
+        super.setIdNummer(personeelsNummer);
+    }
+
+    public String getNaam() {
+        return super.getNaam();
+    }
+
+    public void setNaam(String naam) {
+        super.setNaam(naam);
+    }
+        
+    public String getVoornaam() {
+        return super.getVoornaam();
+    }
+
+    public void setVoornaam(String voornaam) {
+        super.setVoornaam(voornaam);
+    }  
+}

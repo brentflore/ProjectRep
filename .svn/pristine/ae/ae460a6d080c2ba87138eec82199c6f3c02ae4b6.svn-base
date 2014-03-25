@@ -1,0 +1,101 @@
+package domein.domein;
+
+import domein.tableModel.SoortTableModel;
+import java.util.List;
+import java.util.Observable;
+import javax.swing.table.AbstractTableModel;
+
+
+public class CampusController extends Controller 
+{
+    private Campus campus;
+	private Student geselecteerdeStudent;
+	
+	public CampusController()
+	{
+		campus = new Campus();
+	}
+	
+	// Deze methode geeft een tableModel door naar de view.
+	public AbstractTableModel geefTableModel(SoortTableModel soort)
+	{
+		return TableModelFactory.createTableModel(soort, this);
+	}
+	
+	protected Campus getCampus()
+	{
+		return campus;
+	}
+	
+	protected Student getGeslecteerdeStudent()
+	{
+		return geselecteerdeStudent;
+	}
+
+	@Override
+	public void update(Observable o, Object object) 
+	{
+		geselecteerdeStudent = (Student) object;
+		setChanged();
+		notifyObservers(geselecteerdeStudent);
+	}
+
+            
+    public void setGeselecteerdeStudent(Student student)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public void setGeselecteerdePromotor(Promotor promotor)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public Student geefStudent(int rij)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public Promotor geefPromotor(int index)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+   
+    public boolean zoekStudentBijPromotor(Student student)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public boolean zoekPromotorBijStudent(Promotor promotor)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public void ontkoppelStudentPromotor(Student student, Promotor promotor)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public List<Student> geefGeselecteerdeStudent()
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public Promotor geefGeselecteerdePromotor()
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public int geefMaxStudentenPromotor()
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+    public void voegStudentToeNaMax(Student student)
+    {
+        throw new UnsupportedOperationException();
+    }
+    
+   
+}

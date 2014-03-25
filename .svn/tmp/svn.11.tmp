@@ -1,0 +1,34 @@
+package gui;
+
+import domein.tableModel.StudentTableModel;
+
+/**
+ *
+ * @author Kristine
+ */
+public class GuiController 
+{
+    private StudentTableModel sModel;
+
+    public GuiController(StudentTableModel sModel) 
+    {
+        this.sModel = sModel;
+    }
+    
+    public void setLijst(String lijst)
+    {
+        sModel.vulLijstStudenten(lijst);
+    }
+
+    public void maakScherm(String scherm) 
+    {
+        switch (scherm) 
+		{ //Meegeven welke lijst van studenten in het tablemodel moet komen?
+		//case "schermSelStudenten": new OverzichtPanel(new StudentTableModel(null), "schermSelStudenten");
+                //default: null;
+        }
+        
+    }
+    
+    
+}

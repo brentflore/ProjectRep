@@ -1,0 +1,40 @@
+package persistance;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import domein.domein.Student;
+
+public class StudentMapper extends Mapper<Student>
+{
+	@Override
+	public List<Student> geefLijst() {
+		List<Student> lijstStudenten = new ArrayList<>();
+		//met SORT BY
+		lijstStudenten.add(new Student("OMA","An", "Blondeel"));
+		lijstStudenten.add(new Student("OMB","An", "Blondeel"));
+		lijstStudenten.add(new Student("OMC","An", "Blondeel"));
+		lijstStudenten.add(new Student("OMD","An", "Blondeel"));
+		lijstStudenten.add(new Student("OME","An", "Blondeel"));
+		lijstStudenten.add(new Student("OMF","An", "Blondeel"));
+		lijstStudenten.add(new Student("OMG","An", "Blondeel"));
+		lijstStudenten.add(new Student("OMH","An", "Blondeel"));
+		lijstStudenten.add(new Student("OMI","An", "Blondeel"));
+	/*	lijstStudenten.add(new Student("Els", "De Pauw", "OM"));
+		lijstStudenten.add(new Student("Jan", "Dehens", "TIN"));
+		lijstStudenten.add(new Student("Annie", "Dehensse", "OM"));
+		lijstStudenten.add(new Student("Jan-Pieter", "Dehensse", "TIN"));
+		lijstStudenten.add(new Student("Els", "Dehensses", "OM"));
+		lijstStudenten.add(new Student("Jan", "Dehenssses", "TIN"));
+		lijstStudenten.add(new Student("An", "Dehensssesvan", "OM"));
+		lijstStudenten.add(new Student("Annie", "Dehensssesvan", "OM"));
+		lijstStudenten.add(new Student("Els", "Dehensssesvan", "OM"));
+		lijstStudenten.add(new Student("Els", "Dehensssesvanden", "OM"));
+		lijstStudenten.add(new Student("Bart", "Vandecapelle", "TIN"));
+		lijstStudenten.add(new Student("Thijs", "Vandecapelle", "TIN"));
+		lijstStudenten.add(new Student("Jo", "Vandecapelles", "TIN")); */
+		return lijstStudenten;
+	}
+
+	
+}

@@ -1,0 +1,29 @@
+package domein.domein;
+
+import javax.persistence.*;
+import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
+
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+public abstract class Gebruiker {
+    
+    @Id
+    private String idNummer;
+    private String naam;
+    private String voornaam;
+
+    public Gebruiker() {
+    }
+
+    public Gebruiker(String idNummer, String naam, String voornaam) {
+        this.idNummer = idNummer;
+        this.naam = naam;
+        this.voornaam = voornaam;
+    }
+
+    
+    
+    
+    
+    
+}

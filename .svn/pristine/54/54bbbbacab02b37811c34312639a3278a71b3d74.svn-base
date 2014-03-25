@@ -1,0 +1,106 @@
+package domein.domein;
+
+import domein.tableModel.SoortTableModel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import javax.swing.table.AbstractTableModel;
+
+
+public class CampusController extends Controller 
+{
+        private Campus campus;
+	private Student geselecteerdeStudent;
+        private List<Student> geselecteerdeStudenten;
+	
+        private Promotor geselecteerdePromotor;
+        
+	public CampusController()
+	{
+		campus = new Campus();
+        }
+        
+	// Deze methode geeft een tableModel door naar de view.
+	public AbstractTableModel geefTableModel(SoortTableModel soort)
+	{
+		return TableModelFactory.createTableModel(soort, this);
+	}
+	
+	protected Campus getCampus()
+	{
+		return campus;
+	}
+	
+	protected Student getGeslecteerdeStudent()
+	{
+		return geselecteerdeStudent;
+	}
+        
+	protected Promotor getGeslecteerdePromotor()
+	{
+		return geselecteerdePromotor;
+	}
+
+	@Override
+	public void update(Observable o, Object object) 
+        {
+            if(object instanceof Student)
+            {
+            if(geselecteerdeStudenten == null)
+                geselecteerdeStudenten = new ArrayList<>();
+            
+		geselecteerdeStudent = (Student) object; 
+                if(geselecteerdeStudenten.contains(geselecteerdeStudent))
+                {  System.out.println("Deze student werd reeds geselecteerd"); } 
+                else {//met 1 keer klikken hier oke
+                geselecteerdeStudenten.add(geselecteerdeStudent); //Toegevoegd
+		setChanged(); System.out.println(geselecteerdeStudenten); //studenten w correct toegevoegd
+		notifyObservers(geselecteerdeStudent); //Overzichtpanel
+                campus.setGeselecteerdeStudenten(geselecteerdeStudenten);
+                }
+            } else { //object = Promotor //observer in detailpanel updaten
+                if (object == null)
+                {
+                     System.out.println("Gelieve een promotor aan te duiden");
+                }else{
+                geselecteerdePromotor = (Promotor) object;
+                setChanged(); System.out.println(geselecteerdePromotor); //studenten w correct toegevoegd
+		notifyObservers(geselecteerdePromotor); //Overzichtpanel
+                campus.koppelPromotorEnGeselecteerdeStudenten(geselecteerdePromotor);}
+            }
+	}
+        
+        //
+        public Promotor getGeselecteerdePromotor(int rij)
+        {
+            return (Promotor) campus.geefStudentenOfPromotorenlijst("PROMOTOR").get(rij);
+        }
+        
+        public boolean checkHeeftStudentEenPromotor(Student student){
+            return campus.checkHeeftStudentEenPromotor(student);
+        }  
+        
+        public List<? extends Gebruiker> geefStudentenOfPromotorenlijst(String gebruikerType){
+            return campus.geefStudentenOfPromotorenlijst(gebruikerType);
+        } 
+        
+        public boolean heeftPromotorNogPlaatsVoorStudenten(Promotor promotor){
+            return campus.heeftPromotorNogPlaatsVoorStudenten(promotor);
+        }
+        
+        public void ontkoppelStudentEnPromotor(Student student, Promotor promotor){
+            campus.ontkoppelStudentEnPromotor(student, promotor);
+        }
+        
+        public void verwijderStudentUitLijst(Student student){
+            campus.verwijderStudentUitLijst(student);
+        }    
+        
+        public void koppelPromotorEnGeselecteerdeStudenten(Promotor promotor){
+            campus.koppelPromotorEnGeselecteerdeStudenten(promotor);
+        }
+        
+        public void maakGeselecteerdeStudentenLeeg(){
+            campus.maakGeselecteerdeStudentenLeeg();
+        }
+}

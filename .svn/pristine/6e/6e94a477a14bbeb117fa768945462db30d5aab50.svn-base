@@ -1,0 +1,108 @@
+package domein.domein;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import persistance.Mapper;
+import persistance.MapperFactory;
+import persistance.SoortMapper;
+
+/*
+*       @author Jelle
+*/
+public class Campus 
+{
+
+	private List<Gebruiker> gebruikers;
+        private List<Student> studentenlijst;
+        private List<Promotor> promotorenlijst;
+        
+        
+        /**
+         * 
+         * @return geeft alle studenten terug uit de lijst van gebruikers 
+         */
+        public List<Student> geefStudentenlijst(){
+            if(gebruikers != null){
+                studentenlijst = new ArrayList();
+                for(int i = 0; i < gebruikers.size(); i++ ){//zoveel mogelijk enhanced for of iterator
+                    if(gebruikers.get(i) instanceof Student){
+                        studentenlijst.add((Student) gebruikers.get(i));
+                    }
+                }
+                
+                return studentenlijst;
+            }
+            return null;
+        }
+        
+        
+        /**
+         * 
+         * @return heeft alle promotoren terug uit de lijst van gebruikers
+         */
+        public List<Promotor> geefPromotorenlijst(){                            // eventueel dit en studentenlijst samenvoegen naar een generieke methode, om minder duplicate code te hebben.
+            if(gebruikers != null){
+                promotorenlijst = new ArrayList();
+                for(int i = 0; i < gebruikers.size(); i++ ){
+                    if(gebruikers.get(i) instanceof Promotor){
+                        promotorenlijst.add((Promotor) gebruikers.get(i));
+                    }
+                }
+                
+                return promotorenlijst;
+            }
+            return null;
+        }
+        
+        
+        public void koppelStudentEnPromotor(Student student, Promotor promotor){
+            if(promotor.geefAantalStudenten() == promotor.getMaxStudenten()){
+                throw new IllegalArgumentException("Maximum aantal studenten is bereikt");
+            }
+            
+            student.setPromotor(promotor);
+            promotor.addStudent(student);
+            
+        }
+        
+        /* --- Mappers en onderstaande code: Test om gegevens in scherm te krijgen --- */
+	private Mapper<Student> mapper;
+ ///*      
+	public void setMapper(Mapper<Student> mapper)
+	{
+		this.mapper = mapper;
+	}
+               
+        private void opvragenStudenten()
+	{
+		if(mapper == null)
+			mapper = MapperFactory.geefMapper(SoortMapper.STUDENT);
+		studentenlijst = mapper.geefLijst();
+        }
+//*/        
+	public int geefAantalStudenten() 
+	{
+		if(studentenlijst == null)
+                    opvragenStudenten();
+			//geefStudentenlijst();//opvragenStudenten();
+		return studentenlijst.size();
+	}
+
+        public Student geefStudent(int rij) 
+        {
+            if(studentenlijst == null)
+                opvragenStudenten();
+			//geefStudentenlijst();//opvragenStudenten();
+            return studentenlijst.get(rij);
+        }
+        
+        public Promotor geefBeschikbarePromotoren(int rij)
+        {
+            if(promotorenlijst == null)
+                geefPromotorenlijst();
+            
+           // if()
+            return promotorenlijst.get(rij);                
+        }
+}

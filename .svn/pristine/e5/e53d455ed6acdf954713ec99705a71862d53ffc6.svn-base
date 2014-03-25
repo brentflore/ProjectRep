@@ -1,0 +1,117 @@
+package domein.domein;
+
+import java.util.*;
+import javax.persistence.*;
+import persistance.Mapper;
+import persistance.MapperFactory;
+import persistance.SoortMapper;
+
+@Entity
+@NamedQueries({@NamedQuery(name="Stud.findAll", query = "SELECT d FROM Student d")})
+public class Student extends Gebruiker 
+{
+
+    @ManyToOne
+    private Promotor promotor;
+    
+    /*private String studentenNummer;
+    private String voornaam;
+    private String naam;*/
+
+
+    public Student()//default constructor voor JPA 
+    {}
+
+    public Student(String studentenNummer, String naam, String voornaam) 
+    {
+	super(studentenNummer, voornaam, naam);
+	//this.studentenNummer = studentenNummer;
+	//this.voornaam = voornaam;
+	//this.naam = naam;
+    }
+
+    //set & get
+    public void setPromotor(Promotor promotor) 
+    {
+        //geefStudent(index).setPromotor(promotor);
+        this.promotor = promotor;
+        //throw new UnsupportedOperationException();
+    }
+    
+    public Promotor getPromotor() 
+    {
+           return promotor;
+    }
+    /*
+    public String getStudentenNummer() 
+    {
+        return studentenNummer;
+    }
+
+    public void setStudentenNummer(String studentenNummer) 
+    {
+        this.studentenNummer = studentenNummer;
+    }
+
+    public String getVoornaam() 
+    {
+        return voornaam;
+    }
+
+    public void setVoornaam(String voornaam) 
+    {
+        this.voornaam = voornaam;
+    }
+
+    public String getNaam() 
+    {
+        return naam;
+    }
+
+    public void setNaam(String naam) 
+    {
+        this.naam = naam;
+    }*/
+
+    // Methodes voor de tableModel
+    /* Methodes als: 
+     * KoppelPromotor
+     * OntkoppelPromotor
+     * Inschrijven als gast
+     * ...
+     */
+    
+    
+        /*
+	private List<Promotor> promotorenlijst;
+	private Mapper<Promotor> mapper;
+        
+        public Mapper<Promotor> getMapper() 
+	{
+		return mapper;
+	}
+
+	public void setMapper(Mapper<Promotor> mapper) 
+	{
+		this.mapper = mapper;
+	}
+        
+        
+        private void opvragenPromotor()
+	{
+		if(mapper == null)
+			mapper = MapperFactory.geefMapper(SoortMapper.PROMOTOR);
+		promotorenlijst = mapper.geefLijstPerItem(studentenNummer);
+        }
+        
+        public Promotor geefPromotor(int rij) 
+        {
+            if(promotorenlijst == null)
+			opvragenPromotoren();
+            return promotorenlijst.get(rij);
+        }*/
+    
+    
+    
+    
+}

@@ -1,0 +1,144 @@
+package domein.tableModel;
+
+import java.util.HashSet;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
+
+import javax.swing.table.AbstractTableModel;
+
+import domein.domein.Campus;
+import domein.domein.Gebruiker;
+import domein.domein.Student;
+import domein.domein.Subject;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author Kristine
+ */
+public class StudentTableModel extends AbstractTableModel implements Observer, Subject
+{
+	// is luisteraar van overzichtPanel,
+	// is subject, luisteraar is Controller 
+	
+	private Campus campus;
+	private Student student;
+	private Set<Observer> observers;
+        private List<? extends Gebruiker> studentenlijst;
+        private List<Student> selStudentenlijst;
+        private List<Student> selStudentenlijst;
+		
+	private static final String[] KOLOMNAMEN = {"STUDNR","NAAM","VOORNAAM"};
+	
+	public StudentTableModel(Campus campus) 
+	{
+		this.campus = campus;
+		observers = new HashSet<>();
+	}
+
+	@Override
+	public int getColumnCount() 
+	{
+		return KOLOMNAMEN.length;
+	}
+
+	@Override
+	public int getRowCount() 
+	{
+            if(studentenlijst == null)
+                this.vulLijstStudenten("STUDENT");
+            return this.studentenlijst.size();
+		//return campus.geefAantalStudenten();
+	}
+
+	@Override
+	public String getColumnName(int kolom)
+	{
+		return KOLOMNAMEN[kolom];
+	}
+	
+	@Override
+	public Object getValueAt(int rij, int kolom) 
+	{
+		Student student = geefStudent(rij);
+		switch (kolom) 
+		{
+		case 0: return student.getStudentenNummer();
+		case 1: return student.getNaam();
+		case 2: return student.getVoornaam();
+		default:return "";
+		}
+	}
+
+	@Override
+	public void update(Observable o, Object object) 
+	{
+<<<<<<< .mine
+            if (object instanceof Student) 
+		{
+                        selStudentenlijst = new ArrayList<>();
+			student = (Student) object;
+			selStudentenlijst.add(student);// = geselecteerde studenten
+		}
+=======
+		Integer index = (Integer) object;
+                if(selStudentenlijst == null)
+                    selStudentenlijst = new ArrayList<>();
+                selStudentenlijst.add(this.geefStudent(index));
+                //notifyObserver(this.geefStudent(index));
+>>>>>>> .r107
+	}
+	
+	@Override
+	public void addObserver(Observer observer) 
+	{
+		observers.add(observer);	
+	}
+	
+	@Override
+	public void notifyObserver(Object object) 
+	{
+		for(Observer observer : observers)
+		{
+			observer.update(null, object);
+		}
+	}
+        
+        public void vulLijstStudenten(String lijst/*, int rij*/)// switch met string doorgeven, welke lijst, vanuit gui
+        {
+<<<<<<< .mine
+            switch (lijst) 
+		{
+		case "alle":  this.studentenlijst = campus.geefAlleStudenten();
+		case "zProm": this.studentenlijst = campus.geefStudentZonderProm();
+		case "mProm": this.studentenlijst = campus.geefAlleStudenten();
+                case "selectStudenten": this.studentenlijst = selStudentenlijst; //this.setLijstSelStudenten();
+		default: this.studentenlijst = campus.geefAlleStudenten();
+		}
+=======
+            switch(lijst.toUpperCase())
+            {
+                case "STUDENT": this.studentenlijst = campus.geefStudentenOfPromotorenlijst(lijst);
+                case "SELECTED": this.studentenlijst = selStudentenlijst; System.out.println(studentenlijst);//campus.getGeselecteerdeStudenten(rij);
+                default: this.studentenlijst = campus.geefStudentenOfPromotorenlijst(lijst);
+            }
+            
+>>>>>>> .r107
+        }
+        
+        public Student geefStudent(int rij) 
+        {
+            if(studentenlijst == null)
+                vulLijstStudenten("STUDENT");
+            return (Student)studentenlijst.get(rij);
+        }
+        
+        public void selecteerStudent(int rij)
+        {
+            selStudentenlijst = new ArrayList<>(); 
+            Student s = (Student) studentenlijst.get(rij);
+            System.out.println("student =" + s); this.selStudentenlijst.add(s);
+        }
+}

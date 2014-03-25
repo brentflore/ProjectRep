@@ -1,0 +1,40 @@
+
+import domein.domein.CampusController;
+import domein.domein.Promotor;
+import domein.domein.Student;
+import gui.BPCFrame;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import persistance.Util;
+
+
+/**
+ *
+ * @author Jelle
+ */
+public class StartUp 
+{
+    public static void main(String[] args)
+    {
+      Util util = new Util();
+      EntityManager em = util.getEntitymanager();
+      Student stud1 = new Student("Floré", "Gert", "21756bf");
+      //Student stud2 = new Student("De Roeck", "Kristine", "101211kd");
+      Promotor prom1 = new Promotor("Van Vreckem", "Bert", "Vb125", 3);
+      stud1.setPromotor(prom1);
+      prom1.addStudent(stud1);
+      em.getTransaction().begin();
+      em.persist(stud1);
+      em.persist(prom1);
+      em.getTransaction().commit();
+      List<Student> studList;
+        TypedQuery<Student> queryD = em.createNamedQuery("Stud.findAll", Student.class);
+        studList=queryD.getResultList();
+        
+        System.out.println(studList.toString());
+      em.close();
+      util.closeFactory();
+      //new BPCFrame(new CampusController()).setVisible(true);
+    }
+}

@@ -1,0 +1,24 @@
+package domein.domein;
+
+import java.util.Observable;
+import java.util.Observer;
+
+public abstract class Controller extends Observable implements Observer
+{
+//Controller is de subject
+	//luisteraars zijn
+	     //DetailTestPanel
+	     //PromotorTableModel
+
+//Controller is luisteraar van StudentTableModel
+	
+	protected Campus getCampus()
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	protected Student getGeslecteerdeStudent()
+	{
+		throw new UnsupportedOperationException();
+	}
+}

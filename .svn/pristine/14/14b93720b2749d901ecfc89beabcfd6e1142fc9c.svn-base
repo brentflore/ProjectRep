@@ -1,0 +1,19 @@
+package domein.tableModel;
+
+public enum SoortTableModel 
+{
+	STUDENT, PROMOTOR;
+
+	public String toString() 
+        {
+		switch (this) 
+                {
+		case STUDENT:
+			return "Studenten";
+		case PROMOTOR:
+			return "Promotoren";
+		default:
+			return "Soort tablemodel onbekend";
+		}
+	}
+}

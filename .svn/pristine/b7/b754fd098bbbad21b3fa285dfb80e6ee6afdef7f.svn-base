@@ -1,0 +1,85 @@
+package domein.domein;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
+@Entity
+public class Promotor extends Gebruiker 
+{
+        @OneToMany(mappedBy="promotor")
+	private List<Student> studenten;
+        
+        private int maxStudenten;
+        
+        /*
+        private String personeelsNummer;
+        private String voornaam;
+        private String naam;*/
+
+        public Promotor()//default constructor voor JPA
+        {}
+        
+        
+        public Promotor(String naam, String voornaam, String personeelsNummer, int maxStudenten)
+        {
+            super(personeelsNummer,naam, voornaam);
+            //this.personeelsNummer = personeelsNummer;
+            //this.naam = naam;
+            //this.voornaam = voornaam;
+            this.maxStudenten = maxStudenten;
+            studenten = new ArrayList<>();
+        }
+        
+        
+	public int geefAantalStudenten()
+	{
+		return studenten.size();
+	}
+	
+	public Student geefStudent(int index)
+	{
+		return null;
+	}
+
+        public int getMaxStudenten() {
+            return maxStudenten;
+        }
+
+        public void addStudent(Student student) {
+            this.studenten.add(student);
+        }
+        
+    // get & set
+        
+    public List<Student> getStudenten() {
+        return studenten;
+    }
+    
+    public void setStudenten(List<Student> studenten) {
+        this.studenten = studenten;
+    }
+    /*
+    public String getPersoneelsNummer() {
+        return personeelsNummer;
+    }
+
+    public void setPersoneelsNummer(String personeelsNummer) {
+        this.personeelsNummer = personeelsNummer;
+    }
+
+    public String getNaam() {
+        return naam;
+    }
+
+    public void setNaam(String naam) {
+        this.naam = naam;
+    }
+        
+    public String getVoornaam() {
+        return voornaam;
+    }
+
+    public void setVoornaam(String voornaam) {
+        this.voornaam = voornaam;
+    }  */
+}

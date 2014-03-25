@@ -1,0 +1,52 @@
+
+import domein.domein.CampusController;
+import domein.domein.Presentatie;
+import domein.domein.Promotor;
+import domein.domein.Student;
+import domein.tableModel.SoortTableModel;
+import gui.BPCFrame;
+import gui.GuiController;
+import gui.LoginFrame;
+import java.awt.Color;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import persistance.Util;
+
+/**
+ *
+ * @author Jelle
+ */
+public class StartUp {
+
+    public static void main(String[] args) {
+        Util util = Util.getInstance();
+        EntityManager em = util.getEntitymanager();
+        Student stud1 = new Student("21756bf", "Floré", "Gert", "SQL", "Integratie van nieuw SQL-platform in kmo's");
+        Student stud2 = new Student("101211kd", "De Roeck", "Kristine", "BackEnd Programmeren", "Analyse en optimalisatie van bedijfsprocessen in de petrochemie");
+        Promotor prom1 = new Promotor("VB125", "Van Vreckem", "Bert", 3);
+        Promotor prom2 = new Promotor("DA987", "Van Keren", "Tom", 5);
+        stud1.setPromotor(prom1);
+        stud2.setPromotor(prom1);
+        prom1.addStudent(stud1);
+        prom1.addStudent(stud2);
+        em.getTransaction().begin();
+        em.persist(stud1);
+        em.persist(stud1.getPresentatie());
+        em.persist(prom1);
+        em.persist(stud2);
+        em.persist(stud2.getPresentatie());
+
+        em.persist(prom2);
+        em.getTransaction().commit();
+        List<Student> studList;
+        TypedQuery<Student> queryD = em.createNamedQuery("Stud.findAll", Student.class);
+        studList = queryD.getResultList();
+        System.out.println(studList.toString());
+        em.close();
+        util.closeFactory(); 
+      // new GuiController();
+    }
+}

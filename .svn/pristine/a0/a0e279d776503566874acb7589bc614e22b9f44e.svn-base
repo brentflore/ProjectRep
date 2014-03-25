@@ -1,0 +1,109 @@
+package gui;
+
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import domein.domein.CampusController;
+import domein.domein.Promotor;
+import domein.tableModel.SoortTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.table.TableModel;
+
+public class DetailPanel extends javax.swing.JPanel implements Observer 
+{
+        private static final String KOPPEL_BUTTON_LABEL =    "Koppel promotor";
+        private static final String ONTKOPPEL_BUTTON_LABEL = "Ontkoppel promotor";
+        
+	private OverzichtPanel overzichtPromotorenPanel; // hergebruik ! 
+        
+        private JButton addButton;
+        private JButton removeButton;
+        
+	private JTextField txtNaam;
+	private JTextField txtVoornaam;
+        
+	private CampusController controller;
+        
+        private TableModel pmModel;
+
+	public DetailPanel(CampusController controller) 
+	{
+		super();
+		this.controller = controller;
+		initGui();
+	}
+
+	private void initGui() 
+	{
+		try 
+		{
+			this.setPreferredSize(new java.awt.Dimension(775, 300));
+			this.setLayout(null);
+			{
+                                pmModel = controller.geefTableModel(SoortTableModel.PROMOTOR);
+				overzichtPromotorenPanel = new OverzichtPanel(pmModel, "Beschikbare promotoren");
+				// Zo wordt het overzichtPanel herbruikt, we geven hem een algemene tableModel
+				this.add(overzichtPromotorenPanel);
+				overzichtPromotorenPanel.setBounds(20, 20, 500, 115);
+			}
+                        {
+                                addButton = new JButton(KOPPEL_BUTTON_LABEL);
+                                this.add(addButton);
+                                addButton.setBounds(530, 35, 200, 25);
+                                addButton.addActionListener(new DetailPanel.KoppelListener());
+                                
+                                removeButton = new JButton(ONTKOPPEL_BUTTON_LABEL);
+                                this.add(removeButton);
+                                removeButton.setBounds(530, 80, 200, 25);
+                                removeButton.addActionListener(new DetailPanel.OntkoppelListener());
+                        }
+		} catch (Exception e) {	e.printStackTrace(); }
+	}
+        
+        // TODO: vanuit domein koppeling registreren - Observer?
+        private class KoppelListener implements ActionListener 
+        {
+            public void actionPerformed(ActionEvent e) 
+            {
+                System.out.println("apf");
+                if(overzichtPromotorenPanel.getSelectedObject() == null)
+                    System.out.println("Gelieve een promotor aan te duiden");
+                
+                //controller.update(controller, overzichtPromotorenPanel.getSelectedObject());
+                
+                //int rij = (int) overzichtPromotorenPanel.getSelectedObject();
+                //controller.getGeselecteerdePromotor(rij);
+               // if(rij == null)
+               // System.out.println("Gelieve een promotor aan te duiden");
+               // controller.getGeselecteerdePromotor();
+                // overzichtPromotorenPanel.getSelectedObject() = int van promotor uit lijst van promotoren
+                //controller.koppelPromotorEnGeselecteerdeStudenten( overzichtPromotorenPanel.getSelectedObject());
+                // observer.update(); promotor meegeven, w geupdatet in campuscontroller
+            }
+        }
+
+        // TODO: vanuit domein ontkoppeling registreren - Observer?
+        private class OntkoppelListener implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+	@Override
+	public void update(Observable arg0, Object object) 
+	{                
+		//TODO
+	/*	if(object instanceof IStudent) //normaal andere benaming, datainfo
+		{
+			IStudent student = (IStudent) object;
+			txtNaam.setText(student.getNaam());
+			txtVoornaam.setText(student.getVoornaam());
+                }
+        */        
+	}
+}

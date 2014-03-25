@@ -1,0 +1,102 @@
+package gui;
+
+import domein.domein.CampusController;
+import domein.tableModel.SoortTableModel;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Iterator;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
+
+import domein.listModel.SortedListModel;
+import domein.tableModel.StudentTableModel;
+import javax.swing.table.TableModel;
+
+public class DualListBox extends javax.swing.JPanel
+{
+        private static final String ADD_BUTTON_LABEL =    "Selecteer studenten";
+        private static final String REMOVE_BUTTON_LABEL = "Verwijder studenten";
+
+        private JList sourceList;
+        private JList destList;
+
+	private OverzichtPanel overzichtStudentenPanelSrc;
+	private OverzichtPanel overzichtStudentenPanelDest;
+        private JButton addButton;
+        private JButton removeButton;
+	private CampusController controller;
+        private GuiController guiController;
+        
+        private TableModel stmodel;
+
+        public DualListBox(CampusController controller)
+        {
+            super();
+            this.controller = controller;
+            initGui();
+        }
+        
+        // Duplicate code hier oké? - K
+        private void initGui() 
+	{
+		try 
+		{
+			this.setPreferredSize(new java.awt.Dimension(775, 300));
+			this.setLayout(null);
+			{
+                                stmodel = controller.geefTableModel(SoortTableModel.STUDENT);
+                                this.guiController = new GuiController((StudentTableModel) stmodel);
+                                guiController.setLijst("alle");
+				overzichtStudentenPanelSrc = 
+						new OverzichtPanel(stmodel, "Overzicht Studenten");
+                                
+				this.add(overzichtStudentenPanelSrc);
+				overzichtStudentenPanelSrc.setBounds(20, 20, 500, 115);
+			}
+                        {
+                                guiController.setLijst("selectStudenten");
+				overzichtStudentenPanelDest =   // Moet nog aangepast worden: vanuit domein aangepast tableModel doorgeven
+						new OverzichtPanel(controller.geefTableModel(SoortTableModel.STUDENT), "Geselecteerde Studenten");
+				// Zo wordt het overzichtPanel herbruikt, we geven hem een algemene tableModel
+				this.add(overzichtStudentenPanelDest);
+				overzichtStudentenPanelDest.setBounds(20, 150, 500, 115);
+                            
+			}
+                        {
+                                addButton = new JButton(ADD_BUTTON_LABEL);
+                                this.add(addButton);
+                                addButton.setBounds(530, 35, 200, 25);
+                                addButton.addActionListener(new AddListener());
+                                
+                                removeButton = new JButton(REMOVE_BUTTON_LABEL);
+                                this.add(removeButton);
+                                removeButton.setBounds(530, 165, 200, 25);
+                                removeButton.addActionListener(new RemoveListener());
+                        }
+		} catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
+        
+ private class AddListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      int[] i = overzichtStudentenPanelSrc.getSelectedRows();
+      /* Hier die geselecteerde studenten ophalen: hoe? */
+      Object selected[] = sourceList.getSelectedValues();
+      //addDestinationElements(selected);
+      //clearSourceSelected();
+    }
+  }
+
+  private class RemoveListener implements ActionListener {
+    public void actionPerformed(ActionEvent e) {
+      Object selected[] = destList.getSelectedValues();
+      //addSourceElements(selected);
+      //clearDestinationSelected();
+    }
+  }
+}

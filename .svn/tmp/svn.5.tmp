@@ -1,0 +1,116 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import javax.swing.border.LineBorder;
+
+/**
+ *
+ * @author Kristine
+ */
+public class LoginFrame extends JFrame 
+{
+    private JLabel userLabel;
+    private JTextField userText;
+    private JLabel passwordLabel;
+    private JPasswordField passwordText;
+    private JLabel jlblStatus;
+    private JButton loginButton;
+    private JButton cancelButton;
+    
+    public LoginFrame(/* repo , */ String titel) 
+    {
+        super(titel);
+        //this.repo = repo;
+        initGui();
+    }
+    
+    private void initGui() 
+	{
+		try 
+		{
+			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			getContentPane().setLayout(null);
+		{
+                        userLabel = new JLabel("Gebruiker");
+                        userLabel.setBounds(10, 10, 80, 25);
+                        getContentPane().add(userLabel);
+                        
+                        userText = userText = new JTextField(20);
+                        userText.setBounds(100, 10, 160, 25);
+                        getContentPane().add(userText);
+
+        		passwordLabel = new JLabel("Paswoord");
+                	passwordLabel.setBounds(10, 40, 80, 25);
+                        getContentPane().add(passwordLabel);
+
+        		passwordText = new JPasswordField(20);
+                	passwordText.setBounds(100, 40, 160, 25);
+                        getContentPane().add(passwordText);
+
+        		loginButton = new JButton("Login");
+                	loginButton.setBounds(10, 100, 80, 25);
+                        getContentPane().add(loginButton);
+
+            		cancelButton = new JButton("Cancel");
+                	cancelButton.setBounds(180, 100, 80, 25);
+                        getContentPane().add(cancelButton);
+                
+                        jlblStatus = new JLabel(" ");
+                        jlblStatus.setBounds(40, 70, 210, 25);
+                        jlblStatus.setHorizontalAlignment(SwingConstants.CENTER);
+                        getContentPane().add(jlblStatus, BorderLayout.NORTH);
+                }
+                {
+                        loginButton.addActionListener(new ActionListener()
+                        {
+                            @Override
+                            public void actionPerformed(ActionEvent e) 
+                            { if (passwordText.getText().equals("")
+                                   && userText.getText().equals("")) 
+                                {
+                                    jlblStatus.setForeground(Color.BLUE);
+                                    jlblStatus.setText("Login succesful");
+                                } else {
+                    
+                                    jlblStatus.setForeground(Color.RED);
+                                    jlblStatus.setText("Invalid username or password");
+                                }
+                            }
+                        });
+                        cancelButton.addActionListener(new ActionListener() 
+                        {
+                            @Override
+                            public void actionPerformed(ActionEvent e) 
+                            { System.exit(0); }
+                        });
+                }
+			pack();
+			this.setSize(300, 180);
+		} catch (Exception e) 
+		{
+		    //add your error handling code here
+			e.printStackTrace();
+		}
+        }
+}

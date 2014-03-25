@@ -1,0 +1,81 @@
+package domein.tableModel;
+
+import domein.domein.Campus;
+import domein.domein.CampusController;
+import java.util.Observable;
+import java.util.Observer;
+
+import javax.swing.table.AbstractTableModel;
+
+import domein.domein.Promotor;
+import domein.domein.Student;
+
+public class PromotorTableModel extends AbstractTableModel implements Observer 
+{
+	// is luisteraar van OverzichtPanel
+	// en
+	// is luisteraar van Controller
+	private Student student;
+	private CampusController campusController;
+	private static final int MAX_KOLOMMEN = 4;
+	private static final String[] KOLOMNAMEN = 
+		{ "NAAM", "VOORNAAM", "PERSONEELSNR", "MAXSTUD"};
+
+	public PromotorTableModel(Student student) 
+	{
+		this.student = student;
+	}
+        
+        
+
+	@Override
+	public int getColumnCount() 
+	{
+		return MAX_KOLOMMEN;
+	}
+
+	@Override // Should be 0 or 1
+	public int getRowCount() 
+	{
+		if (student == null)
+			return 0;
+		return 1; 
+	}
+
+	@Override
+	public String getColumnName(int kolom) 
+	{
+		return KOLOMNAMEN[kolom];
+	}
+
+        
+	private Campus campus;
+        
+	@Override
+	public Object getValueAt(int rij, int kolom) 
+	{
+                //student = campus.geefStudent(rij);
+		if (student == null)
+			return "";
+		Promotor promotor = student.getPromotor();
+		switch (kolom) // info van promotor weergeven
+		{
+		case 0:
+			return promotor.getNaam();
+		case 1:
+			return promotor.getVoornaam();
+		case 2:
+			return promotor.getPersoneelsNummer();
+		case 3:
+			return promotor.getMaxStudenten();
+		default:
+			return "";
+		}
+	}
+
+	@Override
+	public void update(Observable arg0, Object object) 
+	{
+            /* TODO */
+	}
+}

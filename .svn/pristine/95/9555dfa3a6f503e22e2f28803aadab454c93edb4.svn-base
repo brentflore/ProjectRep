@@ -1,0 +1,62 @@
+package domein.domein;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+public abstract class Gebruiker implements Serializable{
+    
+    @Id
+    private String idNummer;
+    private String naam;
+    private String voornaam;
+
+    public Gebruiker() {
+    }
+
+    public Gebruiker(String idNummer, String naam, String voornaam) {
+        this.idNummer = idNummer;
+        this.naam = naam;
+        this.voornaam = voornaam;
+    }
+
+    public String getIdNummer() {
+        return idNummer;
+    }
+
+    public void setIdNummer(String idNummer) {
+        this.idNummer = idNummer;
+    }
+
+    public String getNaam() {
+        return naam;
+    }
+
+    public void setNaam(String naam) {
+        this.naam = naam;
+    }
+
+    public String getVoornaam() {
+        return voornaam;
+    }
+
+    public void setVoornaam(String voornaam) {
+        this.voornaam = voornaam;
+    }
+
+    @Override
+    public String toString() {
+        return "Gebruiker{" + "idNummer=" + idNummer + ", naam=" + naam + ", voornaam=" + voornaam + '}';
+    }
+    
+    
+    
+
+    
+    
+    
+    
+    
+}

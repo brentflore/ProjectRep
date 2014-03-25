@@ -1,0 +1,49 @@
+package gui;
+import javax.swing.JFrame;
+import javax.swing.border.LineBorder;
+
+import domein.domein.CampusController;
+
+public class BPCFrame extends javax.swing.JFrame 
+{	
+        private DualListBox dual;
+	private DetailPanel detailPanel;
+	private CampusController controller;
+
+	public BPCFrame(CampusController controller) 
+	{
+		super();
+		this.controller = controller;
+		initGui();
+	}
+        
+	private void initGui() 
+	{
+		try 
+		{
+			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			getContentPane().setLayout(null);
+		{
+                        dual = new DualListBox(controller);
+                        getContentPane().add(dual);
+                        dual.setBounds(10, 30, 800,  290);
+                        dual.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
+                }
+		{
+			detailPanel = new DetailPanel(controller);
+			//luisteraar detailPanel inschrijven bij subject controller
+			//controller.addObserver(detailPanel);
+			getContentPane().add(detailPanel);
+			detailPanel.setBounds(10, 375, 800, 290);
+			detailPanel.setBorder(new LineBorder(new java.awt.Color(0,0,0), 1, false));
+		}
+			pack();
+			this.setSize(900, 750);
+			setLocationRelativeTo(null);
+			this.setTitle("Scherm");
+			this.setAlwaysOnTop(true);
+			this.setResizable(true);
+			this.setVisible(true);
+		} catch (Exception e) { e.printStackTrace(); }
+	}
+}

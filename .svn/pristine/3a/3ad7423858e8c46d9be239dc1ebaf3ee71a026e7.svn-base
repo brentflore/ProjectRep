@@ -1,0 +1,19 @@
+package gui;
+
+import domein.domein.CampusController;
+
+public class GuiController // Moet volgorde van de schermen kennen
+{
+    private BPCFrame frame;
+    private LoginFrame lFrame;
+    
+    public GuiController()
+    {
+        new LoginFrame(this);
+    }
+    
+    public void maakBPCFrame()
+    {
+        frame = new BPCFrame(new CampusController());
+    }
+}
